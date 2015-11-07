@@ -36,17 +36,29 @@ public class TelaCaptura extends JFrame {
 	public TelaCaptura() {
 		super();
 		getContentPane().setLayout(new BorderLayout());
+		/*
+		 * Caso não consiga identificar nenhuma câmera, exibe uma mensagem para o usuário e encerra a aplicação.
+		 */
 		if (Webcam.getWebcams() == null && Webcam.getWebcams().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Não foi encontrada nenhuma câmera.");
 			System.exit(0);
 		}
+		/*
+		 * Recupera a câmera default da máquina.
+		 */
 		webcam = Webcam.getDefault();
 		Dimension[] viewSizes = webcam.getViewSizes();
+		/*
+		 * Seta a maior resolução disponível para a câmera identificada.
+		 */
 		Dimension tamanhoFoto = viewSizes[viewSizes.length - 1];
 		webcam.setViewSize(tamanhoFoto);
 		setTitle(webcam.getName());
 		painelVideo = new JPanel();
 		painelVideo.setBorder(BorderFactory.createTitledBorder("Video"));
+		/*
+		 * Esse painel é o default do framework e já exibe a filmagem da webcam.
+		 */
 		painelWebcam = new WebcamPanel(webcam);
 		painelVideo.add(painelWebcam);
 		painelFoto = new JPanel();
@@ -72,6 +84,9 @@ public class TelaCaptura extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				/*
+				 * Recupera a foto da WebCam, seta no label e grava em arquivo.
+				 */
 				BufferedImage webcamImage = webcam.getImage();
 				labelFoto.setIcon(new ImageIcon(webcamImage));
 				try {
